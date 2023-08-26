@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onBeforeUpdate, onUpdated } from "vue";
+import { ref, reactive, watch,onBeforeUpdate } from "vue";
 import { useRouter, useRoute } from "vue-router";
 // import commod from './views/commodity.vue'
 import cartImage from '@/assets/icon-cart.png'
@@ -26,22 +26,16 @@ let backGround = [{
 }, {
     img: '/src/image/icon-cs.png'
 }]
-
 let user = reactive(JSON.parse(localStorage.getItem('login')))
 
-onBeforeUpdate(() => {
-    user = JSON.parse(localStorage.getItem('login'))
-    console.log(2);
-})
-onUpdated(() => {
-    console.log(11);
+onBeforeUpdate(()=>{
+    console.log(111);
 })
 const login = () => {
     router.push({ name: 'login' })
 }
 const goHome = () => {
     router.push({ name: 'home' })
-
 }
 let search = reactive([])
 
@@ -69,18 +63,32 @@ let gotoShop = (index) => {
     if (index == 1) {
         router.push({ name: 'shopCart' })
 
+    }else if(index==0){
+        router.push({ name: 'orderlist' })
+
     }
+}
+let num=reactive(0)
+if(localStorage.getItem('cart')==null){
+    num=reactive(0)
+}else{
+    JSON.parse(localStorage.getItem('cart')).forEach(()=>{
+        num++
+    })
+}
+let gotoCom=()=>{
+    router.push({name:'commodity'})
 }
 </script>
 
 <template>
-    <div class="content">
+    <div class="content" style="user-select: none;">
         <div class="header">
             <div class="head_left">
                 <div>
                     <ul class="h_left_nav">
                         <li @click="goHome()" class="bacImage"></li>
-                        <li class="title" v-for="(item, index) in title" :key="item">{{ item.name }}</li>
+                        <li class="title" v-for="(item, index) in title" @click="gotoCom()" :key="item">{{ item.name }}</li>
                     </ul>
                 </div>
             </div>
@@ -95,7 +103,7 @@ let gotoShop = (index) => {
                         欢迎
                     </li>
                     <li class="shopCart" v-for="(item, index) in backGround" :key="item"
-                        :style="{ backgroundImage: 'url(' + item.img + ')' }" @click="gotoShop(index)">{{ index == 1 ? 0 :
+                        :style="{ backgroundImage: 'url(' + item.img + ')' }" @click="gotoShop(index)">{{ index == 1 ? num :
                             '' }}</li>
                     <li>
                         <input v-model="intValue" @keyup.enter.native="goCommodity()" type="text" />

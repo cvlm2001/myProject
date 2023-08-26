@@ -26,11 +26,11 @@
             <h3>尺码换算器</h3>
             <p class="size">
                 <span>尺码</span>
-                <el-input-number style="width: 80px;" v-model="sizeNum" :min="36" :max="45" size="small" />
+                <el-input-number style="width: 80px;" v-model="commodity.size" :min="36" :max="45" size="small" />
             </p>
             <p class="number">
                 <span>数量</span>
-                <el-input-number style="width: 80px;" v-model="num" :min="1" :max="5" size="small" />
+                <el-input-number style="width: 80px;" v-model="commodity.num" :min="1" :max="5" size="small" />
             </p>
             <p class="buy">立即购买</p>
             <p class="shopCart" @click="gotoShop()">加入购物车</p>
@@ -44,14 +44,34 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router';
 let router = useRouter()
-const num = ref(1)
-const sizeNum = ref(36)
 let commodity = reactive()
 commodity = JSON.parse(sessionStorage.getItem("key"))
-let shopCart = reactive([JSON.parse(localStorage.getItem('cart'))])
+let shopCart
 let gotoShop = () => {
-        localStorage.setItem('cart', JSON.stringify(commodity))
-    router.push({ name: 'shopCart' })
+    if (localStorage.getItem('login') != null) {
+        if (JSON.parse(localStorage.getItem('cart')) == null) {
+            localStorage.setItem('cart', JSON.stringify([commodity]))
+            shopCart = reactive(JSON.parse(localStorage.getItem('cart')))
+            router.push({ name: 'shopCart' })
+        } else {
+
+            shopCart = reactive(JSON.parse(localStorage.getItem('cart')))
+            shopCart.forEach(item => {
+                if (item.id != commodity.id) {
+                    shopCart.push(commodity)
+                } else {
+                    item.num++
+                }
+            });
+            localStorage.setItem('cart', JSON.stringify(shopCart))
+
+            router.push({ name: 'shopCart' })
+
+        }
+    }else{
+    router.push({ name: 'login' })
+
+    }
 }
 
 

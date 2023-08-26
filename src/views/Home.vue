@@ -77,7 +77,9 @@ let Carousel = [
 let commodity = reactive([{
     id: 1,
     src: 'src/image/shoe.png',
-    sex: '男',
+    size: 36,
+    switch:false,
+    state:true,
     num:1,
     title: '【小童】Chuck 70经典男高帮帆布童鞋黑',
     oldPrice: 564,
@@ -85,14 +87,18 @@ let commodity = reactive([{
 }, {
     id: 2,
     src: 'src/image/new.png',
-    sex: '女',
+    size: 36,
+    switch:false,
+    state:true,
     num:1,
     title: '【男女同款】1970S男女高帮帆布鞋青提绿苹果绿多巴胺',
     oldPrice: 321,
     newPrice: 234
 }, {
     id: 3,
-    sex: '女',
+    size: 36,
+    switch:false,
+    state:true,
     src: 'src/image/shoe.png',
     num:1,
     title: '男女同款】复古76 男女皮质星箭板鞋',
@@ -100,7 +106,9 @@ let commodity = reactive([{
     newPrice: 216
 }, {
     id: 4,
-    sex: '儿童',
+    size: 36,
+    switch:false,
+    state:true,
     num:1,
     src: 'src/image/1B_NEW.png',
     title: '【男款】Run Star Legacy CX夹心厚底鞋丹宁风潮',
@@ -108,7 +116,9 @@ let commodity = reactive([{
     newPrice: 456
 }, {
     id: 5,
-    sex: '男',
+    size: 36,
+    switch:false,
+    state:true,
     num:1,
     src: 'src/image/shoe.png',
     title: '【女款】1970S男女低帮帆布鞋火龙果粉多巴胺色',
@@ -116,7 +126,9 @@ let commodity = reactive([{
     newPrice: 356
 }, {
     id: 6,
-    sex: '女',
+    size: 36,
+    switch:false,
+    state:true,
     num:1,
     src: 'src/image/new.png',
     title: '【男女】Chuck 70 Marquis男女厚底鞋',
@@ -133,6 +145,8 @@ const gotoDetails = (item) => {
     sessionStorage.setItem("key", JSON.stringify(item));
     router.push({ name: 'details' })
 }
+
+
 </script>
 <style scoped>
 .el-carousel__item h3 {
@@ -190,11 +204,15 @@ const gotoDetails = (item) => {
         box-shadow: 0px 10px 8px rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
         margin-right: 10px;
-
+        
         &:nth-child(4n) {
             margin-right: 0;
         }
     }
+    .Product:hover{
+        box-shadow: 0px 15px 12px rgba(0, 0, 0, 0.5);
+        
+        }
 
     .street {
         .strTitle {

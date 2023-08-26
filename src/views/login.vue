@@ -35,10 +35,10 @@
     </div>
 </template>
 <script setup>
-import { ref, reactive, getCurrentInstance } from 'vue'
+import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router';
 const router=useRouter()
-let {ctx:that,proxy}=getCurrentInstance()
+
 let random = ref(Math.floor(Math.random() * 9000) + 1000)
 let change = () => {
     random.value = Math.floor(Math.random() * 9000) + 1000
@@ -80,10 +80,9 @@ let checBox = () => {
 let login = () => {
     if (isActive.value == false&&account.password!=''&&isTest.value==false&&checkbox==true) {
         localStorage.setItem('login',JSON.stringify(account))
-        console.log(account);
-        router.push({name:"home",query:{t:Date.now()}})
-        that.$forceUpdate();
-
+        
+        router.push({path:"/",query:{t:Date.now()}})
+        
     }
 }
 </script>

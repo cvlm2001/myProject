@@ -84,4 +84,8 @@ const gotoDetails=(item)=>{
             margin-right: 0;
         }
     }
+    .Product:hover{
+        box-shadow: 0px 15px 12px rgba(0, 0, 0, 0.5);
+        
+        }
 </style>
