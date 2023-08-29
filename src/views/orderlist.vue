@@ -6,7 +6,7 @@
             </div>
             <hr>
             <div class="content" v-for="(item, index) in order" :key="index">
-                <div class="head">
+                <div class="head" v-if="order!=null&&address!=null">
                     <p>
                         订单号码
                         <span>{{ allprice[index].model }}</span>
@@ -16,7 +16,7 @@
                         <span>￥{{ allprice[index].sum }}.00</span>
                     </p>
                 </div>
-                <div class="middle">
+                <div class="middle" v-if="order!=null&&address!=null">
                     <div class="mid_left">
                         <p>订单日期:{{ allprice[index].time }}</p>
                         <p>支付状态
@@ -31,10 +31,16 @@
                     </div>
 
                 </div>
-                <div class="footer">
+                <div class="footer" v-if="order!=null&&address!=null">
                     <div class="order" :class="{ hide: item.lamp }">
                         <div class="order_head">
                             您的订单
+                        </div>
+                        <div class="address">
+                            <p>收货人:{{ item[0].address.person }}</p>
+                            <p>电话:{{ item[0].address.phone }}</p>
+                            <p>地址:{{ item[0].address.city[0]+item[0].address.city[1] +item[0].address.city[2] +item[0].address.detail }}</p>
+                            <p>邮箱:{{ item[0].address.mail }}</p>
                         </div>
                         <div class="order_cont" v-for="items in item" :key="items">
                             <div>
@@ -66,6 +72,7 @@
                         </p>
                     </div>
                 </div>
+                <p v-else>暂无商品</p>
             </div>
         </div>
     </div>
@@ -73,10 +80,21 @@
 <script setup>
 import { ref, reactive } from 'vue'
 let order = reactive(JSON.parse(localStorage.getItem('order')))
-order.forEach(item => {
+if(order!=null){
+    order.forEach(item => {
     item.lamp = true
 });
+}
 let allprice = reactive(JSON.parse(localStorage.getItem('sum')))
+let address = reactive(JSON.parse(localStorage.getItem('address')))
+// let site=reactive()
+// if(address!=null){
+//     address.forEach((item)=>{
+//     if(item.default==true){
+//         site=item
+//     }
+// })
+// }
 let seeMore = (item) => {
     item.lamp = !item.lamp
 
@@ -178,7 +196,9 @@ let del = (index) => {
                         padding-bottom: 20px;
                         border-bottom: 1px solid #ccc;
                     }
-
+                    .address{
+                        border-bottom: 1px dashed #ccc;
+                    }
                     .order_cont {
                         display: flex;
                         justify-content: space-between;

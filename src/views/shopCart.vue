@@ -134,7 +134,18 @@ let settlement = () => {
     //结算
 
     totalPrice()
-
+    let address = JSON.parse(localStorage.getItem('address'))
+    let edit
+    if (address == null) {
+        alert('请添加地址')
+        router.push({ path: 'order/address' })
+    } else {
+        address.forEach((item) => {
+            if (item.default) {
+                edit = item
+            }
+        })
+    }
     let ordList = reactive([])
     if (JSON.parse(localStorage.getItem('order')) == null) {
         order = reactive([])
@@ -154,13 +165,6 @@ let settlement = () => {
     cartShop.forEach((item, index) => {
         if (item.switch == true) {
             ordList.push(item)
-            // cartShop.splice(index, 1)
-            // if (cartShop == '') {
-            //     localStorage.removeItem('cart')
-
-            // } else {
-            //     localStorage.setItem('cart', JSON.stringify(cartShop))
-            // }
         }
     })
     ordList.forEach((item) => {
@@ -174,12 +178,15 @@ let settlement = () => {
         }
 
     })
+    ordList[0].address = edit
     order.push(ordList)
     if (ordList != '') {
         localStorage.setItem('order', JSON.stringify(order))
         localStorage.setItem('sum', JSON.stringify(allprice))
 
-        router.push({ name: 'order' })
+
+        router.push({ path: '/order/' })
+
     } else {
         alert('请选择商品')
     }

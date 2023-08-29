@@ -64,7 +64,8 @@ let gotoShop = (index) => {
         router.push({ name: 'shopCart' })
 
     }else if(index==0){
-        router.push({ name: 'orderlist' })
+    router.push({path:'/order/'})
+        
 
     }
 }

@@ -54,6 +54,7 @@ const router = createRouter({
       component: () => import('../views/order.vue'),
     children:[{
       path: '',
+      name:'orderlist', 
       component: () => import('../views/orderlist.vue'),
 
     },{
