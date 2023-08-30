@@ -5,7 +5,7 @@
                 <h2>收藏</h2>
             </div>
             <hr>
-            <div class="content" v-for="(item,index) in collect" :key="item">
+            <div class="content" v-for="(item, index) in collect" :key="item">
                 <div class="cont_left">
                     <img :src="item.src" alt="">
                 </div>
@@ -15,7 +15,7 @@
                             <p>{{ item.title }}</p>
                         </div>
                         <div>
-                            <p @click="del(item,index)">
+                            <p @click="del(item, index)">
                                 <span></span>
                                 删除
                             </p>
@@ -26,48 +26,79 @@
                         <p @click="gotoShop(item)">添加到购物车</p>
                     </div>
                 </div>
-
             </div>
-            <div v-if="collect==''">
+            <div v-if="collect == ''">
                 无收藏
             </div>
         </div>
-        
+
     </div>
 </template>
 <script setup>
 import { reactive } from 'vue'
-import{useRouter} from 'vue-router'
-const router=useRouter()
-let collect =reactive( JSON.parse(localStorage.getItem('collect')))
-console.log(collect=='');
+import { useRouter } from 'vue-router'
+const router = useRouter()
+let collect = reactive(JSON.parse(localStorage.getItem('collect')))
+console.log(collect == '');
 let shopCart
-let gotoShop = (item) => {
-    console.log(item);
+let gotoShop = (items) => {
+    let shopNum = 0
+    let idNum = 0
+    let shopId = []
+    let shopswit = false
+    if (localStorage.getItem('login') != null) {
         if (JSON.parse(localStorage.getItem('cart')) == null) {
-            localStorage.setItem('cart', JSON.stringify([item]))
+            localStorage.setItem('cart', JSON.stringify([items]))
             shopCart = reactive(JSON.parse(localStorage.getItem('cart')))
             router.push({ name: 'shopCart' })
         } else {
 
             shopCart = reactive(JSON.parse(localStorage.getItem('cart')))
-            shopCart.forEach(items => {
-                if (items.id != item.id) {
-                    shopCart.push(item)
-                } else {
-                    items.num++
-                }
+            shopCart.forEach(item => {
+                shopNum++
+                shopId.push(item.id)
+
             });
+            shopCart.forEach((item) => {
+                if (item.id == items.id) {
+                    if (item.size == items.size) {
+                        console.log('尺码=');
+                        item.num++
+                        item.type = true
+                    } else {
+                        shopCart.forEach((i, index) => {
+                            if (i.id == items.id && i.size == items.size) {
+                                i++
+                                shopswit = true
+                            }
+                        })
+                        if (!shopswit) {
+                            console.log('尺码不=');
+                            shopCart.push(items)
+                        }
+
+                    }
+                } else {
+                    idNum++
+                }
+            })
+            if (idNum == shopNum) {
+                console.log(333);
+                shopCart.push(items)
+            }
             localStorage.setItem('cart', JSON.stringify(shopCart))
 
             router.push({ name: 'shopCart' })
 
         }
-    
+    } else {
+        router.push({ name: 'login' })
+
+    }
 }
-let del=(item,index)=>{
-collect.splice(index,1)
-localStorage.setItem('collect',JSON.stringify(collect))
+let del = (item, index) => {
+    collect.splice(index, 1)
+    localStorage.setItem('collect', JSON.stringify(collect))
 }
 </script>
 <style scoped>

@@ -32,7 +32,7 @@ const router = createRouter({
       path: '/commodity',
       name: 'commodity',
       meta:{
-        isAute:false
+        isAute:true
       },
       component: () => import('../views/commodity.vue')
     },

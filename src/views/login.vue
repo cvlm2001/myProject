@@ -140,12 +140,12 @@ let login = () => {
         }
 
         .change {
+            width: 70px;
+            position: relative;
+            top: 7px;
             font-size: 12px;
             cursor: pointer;
-            /* position: relative;
-            top: 14px; */
             text-align: center;
-            width: 70px;
         }
     }
 

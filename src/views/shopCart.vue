@@ -12,10 +12,10 @@
                 </p>
             </div>
             <hr>
-            <div class="content" v-for="item in cartShop" :key="item">
+            <div class="content" v-for="(item,index) in cartShop" :key="item">
                 <div class="select">
                     <div @click="select(item)" :class="{ bac: item.switch, bac_check: !item.switch }"></div>
-                    <div style="cursor: pointer;" @click="del(item, index)">
+                    <div style="cursor: pointer;" @click="del(item,index)">
                         <span></span>
                         <span>删除</span>
                     </div>
@@ -54,19 +54,9 @@
 <script setup>
 import { ref, reactive, watch } from 'vue'
 import router from '../router';
-
 let cartShop = reactive(JSON.parse(localStorage.getItem('cart')))
 let sum = reactive({ num: 0, lenght: 0 })
 let price = []
-// watch(cartShop, () => {
-//     if (cartShop == '') {
-//         sum.lenght = reactive(0)
-//         localStorage.removeItem('cart')
-//     } else {
-//        
-//     }
-
-// })
 let totalPrice = () => {
     sum.num = 0
     sum.lenght = 0
@@ -89,6 +79,7 @@ let add = () => {
     totalPrice()
 }
 const del = (item, index) => {
+    console.log(index);
     cartShop.splice(index, 1)
     if (cartShop != '') {
         localStorage.setItem('cart', JSON.stringify(cartShop))

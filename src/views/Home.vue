@@ -61,11 +61,19 @@
 <script setup>
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
+import cartImage from '@/image/shoe.png'
+import newShoe from '@/image/new.png'
+import Bnew from '@/image/1B_NEW.png'
+import pink from '@/image/pink.png'
+import wonmen from '@/image/wonmen.png'
+import man from '@/image/man.png'
+
+
 const router = useRouter()
 
 let Carousel = [
     {
-        img: "/src/image/lb1-pc.png",
+        img: "/src/image/lb1.png",
     },
     {
         img: "/src/image/lb2.jpg",
@@ -76,7 +84,7 @@ let Carousel = [
 ];
 let commodity = reactive([{
     id: 1,
-    src: 'src/image/shoe.png',
+    src: cartImage,
     size: 36,
     switch:false,
     state:true,
@@ -86,7 +94,7 @@ let commodity = reactive([{
     newPrice: 456
 }, {
     id: 2,
-    src: 'src/image/new.png',
+    src: Bnew,
     size: 36,
     switch:false,
     state:true,
@@ -99,9 +107,9 @@ let commodity = reactive([{
     size: 36,
     switch:false,
     state:true,
-    src: 'src/image/shoe.png',
+    src: newShoe,
     num:1,
-    title: '男女同款】复古76 男女皮质星箭板鞋',
+    title: '【男女同款】复古76 男女皮质星箭板鞋',
     oldPrice: 456,
     newPrice: 216
 }, {
@@ -110,7 +118,7 @@ let commodity = reactive([{
     switch:false,
     state:true,
     num:1,
-    src: 'src/image/1B_NEW.png',
+    src: pink,
     title: '【男款】Run Star Legacy CX夹心厚底鞋丹宁风潮',
     oldPrice: 789,
     newPrice: 456
@@ -120,8 +128,8 @@ let commodity = reactive([{
     switch:false,
     state:true,
     num:1,
-    src: 'src/image/shoe.png',
-    title: '【女款】1970S男女低帮帆布鞋火龙果粉多巴胺色',
+    src: wonmen,
+    title: '【女款】1970S低帮帆布鞋火龙果粉多巴胺色',
     oldPrice: 478,
     newPrice: 356
 }, {
@@ -130,7 +138,7 @@ let commodity = reactive([{
     switch:false,
     state:true,
     num:1,
-    src: 'src/image/new.png',
+    src: man,
     title: '【男女】Chuck 70 Marquis男女厚底鞋',
     oldPrice: 765,
     newPrice: 432

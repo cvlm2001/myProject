@@ -107,7 +107,10 @@ let payment = (index) => {
 }
 let del = (index) => {
     order.splice(index, 1)
+    allprice.splice(index,1)
     localStorage.setItem('order', JSON.stringify(order))
+    localStorage.setItem('sum', JSON.stringify(allprice))
+
 }
 </script>
 <style scoped>

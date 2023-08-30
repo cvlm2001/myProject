@@ -1,18 +1,14 @@
 <script setup>
 import { ref, reactive, watch, onBeforeUpdate, getCurrentInstance } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import Cookies from 'js-cookie'
 // import commod from './views/commodity.vue'
 import cartImage from '@/assets/icon-cart.png'
 let intValue = ref('')
 const router = useRouter()
 const route = useRoute()
-
 const instan = getCurrentInstance()
 const intDate = instan.appContext.config.globalProperties
 let cook = reactive({ user: intDate.$cookies.get("token") })
-
-
 let title = [{
     name: "FUN肆爱 甜出圈"
 }, {
@@ -34,13 +30,13 @@ let backGround = [{
     img: '/src/image/icon-cs.png'
 }]
 let user = reactive(JSON.parse(localStorage.getItem('login')))
+let num = reactive(0)
 
 watch(route, () => {
     if (intDate.$cookies.get("token") != null) {
         cook.user = intDate.$cookies.get("token")
-        // console.log(cook.user);
     }
-    num=0
+    num = 0
     if (localStorage.getItem('cart') == null) {
         num = 0
     } else {
@@ -51,6 +47,13 @@ watch(route, () => {
 })
 const login = () => {
     router.push({ name: 'login' })
+}
+const exit = () => {//退出登录
+    localStorage.removeItem('login')
+    intDate.$cookies.remove('token')
+    cook.user = null
+    num = 0
+    router.push({path:'/'})
 }
 const goHome = () => {
     router.push({ name: 'home' })
@@ -87,10 +90,27 @@ let gotoShop = (index) => {
 
     }
 }
-let num = reactive(0)
 
-let gotoCom = () => {
-    router.push({ name: 'commodity' })
+let gotoCom = (index) => {
+    let sex = ''
+    if (index == 3) {
+        sex='男'
+    }else if(index==4){
+        sex='女'
+    }else if(index==5){
+        sex='童'
+    }
+    search=[]
+    sessionStorage.clear('search')
+    let com = JSON.parse(localStorage.getItem('commod'))
+    com.forEach(item => {
+        if (item.title.indexOf(sex) != -1) {
+            search.push(item)
+        }
+    });
+    sessionStorage.setItem("search", JSON.stringify(search));
+    router.push({ path: 'commodity', query: { t: Date.now() } })
+
 }
 </script>
 
@@ -101,7 +121,8 @@ let gotoCom = () => {
                 <div>
                     <ul class="h_left_nav">
                         <li @click="goHome()" class="bacImage"></li>
-                        <li class="title" v-for="(item, index) in title" @click="gotoCom()" :key="item">{{ item.name }}</li>
+                        <li class="title" v-for="(item, index) in title" @click="gotoCom(index)" :key="item">{{ item.name }}
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -113,7 +134,8 @@ let gotoCom = () => {
                         <span style="cursor: pointer;" @click="login()">登录</span>
                     </li>
                     <li v-else>
-                        欢迎
+                        <span>欢迎</span>
+                        <span @click="exit()" class="exit">退出登录</span>
                     </li>
                     <li class="shopCart" v-for="(item, index) in backGround" :key="item"
                         :style="{ backgroundImage: 'url(' + item.img + ')' }" @click="gotoShop(index)">{{ index == 1 ? num :
@@ -149,6 +171,13 @@ let gotoCom = () => {
     list-style: none;
     margin: 0;
     padding: 0;
+}
+
+.exit {
+    font-size: 12px;
+    cursor: pointer;
+    margin-left: 20px;
+    border-bottom: 1px solid #ccc;
 }
 
 .content {
@@ -192,6 +221,8 @@ let gotoCom = () => {
                     background: 16px 17px no-repeat;
                     background-size: 32px 32px;
                     margin: auto;
+                    cursor: pointer;
+                    font-size: 13px;
                 }
             }
 
@@ -201,7 +232,6 @@ let gotoCom = () => {
 
     .footer {
         margin-top: 40px;
-
         .footCont {
             margin-top: 30px;
             display: flex;
@@ -218,5 +248,4 @@ let gotoCom = () => {
         }
 
     }
-}
-</style>
+}</style>
