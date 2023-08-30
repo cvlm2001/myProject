@@ -60,21 +60,30 @@ const router = createRouter({
     },{
       path:'address',
       component:()=>import('../views/address.vue')
-    }]
+    },{
+      path:'collect',
+      component:()=>import('../views/collect.vue')
+    }
+  ]
     },
     
   ]
 })
 router.beforeEach((to,from,next)=>{
+  
   if(to.meta.isAute!=true){
     if(localStorage.getItem('login')==null&&to.name!='login'){
       alert('请先登录')
       next({name:'login'})
     }else{
+      
       next()
+      
     }
   }else{
     next()
+    
+
   }
 })
 

@@ -208,6 +208,7 @@ let del = (index) => {
                         >div {
                             >img {
                                 width: 160px;
+                                height: 160px;
                             }
                         }
 

@@ -30,7 +30,7 @@
                 </h2>
                 <ul>
                     <li><span></span>我的优惠卷</li>
-                    <li><span></span>我的收藏</li>
+                    <li @click="gotoCollect()"><span></span>我的收藏</li>
                 </ul>
             </div>
         </div>
@@ -46,6 +46,10 @@ let gotoOrderlist=()=>{
 }
 let gotoAddress=()=>{
     router.push({path:'/order/address'})
+
+}
+let gotoCollect=()=>{
+    router.push({path:'/order/collect'})
 
 }
 </script>

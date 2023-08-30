@@ -80,7 +80,7 @@ let totalPrice = () => {
     x.forEach((item) => {
         sum.num += item
     })
-    console.log(sum.num);
+    // console.log(sum.num);
 }
 if (cartShop != null) { totalPrice() }
 
@@ -132,65 +132,67 @@ let ordList = reactive([])
 let allprice
 let settlement = () => {
     //结算
-
-    totalPrice()
     let address = JSON.parse(localStorage.getItem('address'))
     let edit
+    let ordList = reactive([])
     if (address == null) {
         alert('请添加地址')
         router.push({ path: 'order/address' })
     } else {
+        totalPrice()
+
+        if (JSON.parse(localStorage.getItem('order')) == null) {
+            order = reactive([])
+        } else {
+            order = reactive(JSON.parse(localStorage.getItem('order')))
+        }
+        if (JSON.parse(localStorage.getItem('sum')) == null) {
+            allprice = reactive([])
+        } else {
+            allprice = reactive(JSON.parse(localStorage.getItem('sum')))
+
+        }
+        let date = new Date().getFullYear() + ' ' + new Date().getMonth() + ' ' + new Date().getDate()
+        allprice.push({ sum: sum.num, time: date, model: Date.now() })
+        console.log(allprice);
+
+        cartShop.forEach((item, index) => {
+            if (item.switch == true) {
+                ordList.push(item)
+            }
+        })
+        ordList.forEach((item) => {
+            let index = cartShop.indexOf(item)
+            cartShop.splice(index, 1)
+            if (cartShop != '') {
+                localStorage.setItem('cart', JSON.stringify(cartShop))
+
+            } else {
+                localStorage.removeItem('cart')
+            }
+
+        })
         address.forEach((item) => {
             if (item.default) {
                 edit = item
             }
         })
-    }
-    let ordList = reactive([])
-    if (JSON.parse(localStorage.getItem('order')) == null) {
-        order = reactive([])
-    } else {
-        order = reactive(JSON.parse(localStorage.getItem('order')))
-    }
-    if (JSON.parse(localStorage.getItem('sum')) == null) {
-        allprice = reactive([])
-    } else {
-        allprice = reactive(JSON.parse(localStorage.getItem('sum')))
+        ordList[0].address = edit
+        console.log(ordList);
+        console.log(edit);
+        order.push(ordList)
+        if (ordList != '') {
+            localStorage.setItem('order', JSON.stringify(order))
+            localStorage.setItem('sum', JSON.stringify(allprice))
 
-    }
-    let date = new Date().getFullYear() + ' ' + new Date().getMonth() + ' ' + new Date().getDate()
-    allprice.push({ sum: sum.num, time: date, model: Date.now() })
-    console.log(allprice);
 
-    cartShop.forEach((item, index) => {
-        if (item.switch == true) {
-            ordList.push(item)
-        }
-    })
-    ordList.forEach((item) => {
-        let index = cartShop.indexOf(item)
-        cartShop.splice(index, 1)
-        if (cartShop != '') {
-            localStorage.setItem('cart', JSON.stringify(cartShop))
+            router.push({ path: '/order/' })
 
         } else {
-            localStorage.removeItem('cart')
+            alert('请选择商品')
         }
-
-    })
-    ordList[0].address = edit
-    order.push(ordList)
-    if (ordList != '') {
-        localStorage.setItem('order', JSON.stringify(order))
-        localStorage.setItem('sum', JSON.stringify(allprice))
-
-
-        router.push({ path: '/order/' })
-
-    } else {
-        alert('请选择商品')
+        
     }
-
 }
 
 

@@ -23,7 +23,7 @@
             <p>颜色:黑色</p>
             <p>型号:A0705C001</p>
             <hr>
-            <h3>尺码换算器</h3>
+            <h3 @click="collect()" style="color:brown;">收藏</h3>
             <p class="size">
                 <span>尺码</span>
                 <el-input-number style="width: 80px;" v-model="commodity.size" :min="36" :max="45" size="small" />
@@ -48,6 +48,10 @@ let commodity = reactive()
 commodity = JSON.parse(sessionStorage.getItem("key"))
 let shopCart
 let gotoShop = () => {
+    let shopNum = 0
+    let idNum = 0
+    let shopId = []
+    let shopswit=false
     if (localStorage.getItem('login') != null) {
         if (JSON.parse(localStorage.getItem('cart')) == null) {
             localStorage.setItem('cart', JSON.stringify([commodity]))
@@ -57,23 +61,58 @@ let gotoShop = () => {
 
             shopCart = reactive(JSON.parse(localStorage.getItem('cart')))
             shopCart.forEach(item => {
-                if (item.id != commodity.id) {
-                    shopCart.push(commodity)
-                } else {
-                    item.num++
-                }
+                shopNum++
+                shopId.push(item.id)
+                
             });
+            shopCart.forEach((item) => {
+                if (item.id == commodity.id) {
+                    if (item.size == commodity.size) {
+                        console.log('尺码=');
+                        item.num++
+                        item.type = true
+                    } else {
+                        shopCart.forEach((items,index)=>{
+                            if (items.id==commodity.id&&items.size==commodity.size) {
+                                items++
+                                shopswit=true
+                            }
+                        })
+                        if(!shopswit){
+                            console.log('尺码不=');
+                            shopCart.push(commodity)
+                        }
+
+                    }
+                } else {
+                    idNum++
+                }
+            })
+            if (idNum == shopNum) {
+                console.log(333);
+                shopCart.push(commodity)
+            }
             localStorage.setItem('cart', JSON.stringify(shopCart))
 
             router.push({ name: 'shopCart' })
 
         }
-    }else{
-    router.push({ name: 'login' })
+    } else {
+        router.push({ name: 'login' })
 
     }
 }
-
+let coll = reactive([])
+let collect = () => {//收藏
+    if (localStorage.getItem('collect') == null) {
+        coll = reactive([])
+    } else {
+        coll = JSON.parse(localStorage.getItem('collect'))
+    }
+    coll.push(commodity)
+    localStorage.setItem('collect', JSON.stringify(coll))
+    router.push({ path: 'order/collect' })
+}
 
 
 </script>

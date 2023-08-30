@@ -120,10 +120,10 @@
 import { ref, reactive } from 'vue'
 import { ArrowDown } from '@element-plus/icons-vue'
 let swit = reactive({ kg: false, switch: false, editIndex: '' })
-const add = () => {
+const add = () => {//添加
     swit.kg = reactive(true)
 }
-const cancel = () => {
+const cancel = () => {//取消
     swit.kg = reactive(false)
     addredd = reactive(
         {
@@ -136,7 +136,7 @@ const cancel = () => {
         }
     )
 }
-let town = reactive([{
+let town = reactive([{//地址
     province: '江西',
     market: [{
         city: '南昌',
@@ -178,7 +178,7 @@ let addredd = reactive(
     }
 )
 let cityIndex = ref(0)
-const handleCommand = (command) => {
+const handleCommand = (command) => {//省份
     addredd.city[0] = command
     addredd.city[1] = ''
     addredd.city[2] = ''
@@ -189,7 +189,7 @@ const handleCommand = (command) => {
     })
 }
 let countyIndex = ref(0)
-let handcity = (command) => {
+let handcity = (command) => {//市区
     addredd.city[1] = command
     addredd.city[2] = ''
     // console.log(town[cityIndex.value].market);
@@ -199,10 +199,10 @@ let handcity = (command) => {
         }
     })
 }
-let county = (command) => {
+let county = (command) => {//县
     addredd.city[2] = command
 }
-const edit = (item, index) => {
+const edit = (item, index) => {//编辑地址
         console.log(item);
         addredd.person = item.person,
         addredd.phone = item.phone,
@@ -212,12 +212,9 @@ const edit = (item, index) => {
         addredd.detail = item.detail
         swit.switch=true
         swit.editIndex=index
-
     add()
-
-
 }
-const del = (index) => {
+const del = (index) => {//删除
     site.splice(index,1)
     let num=0
     site.forEach((item)=>{
@@ -226,12 +223,12 @@ const del = (index) => {
         }
     })
     console.log(num);
-    if(num==site.length){
+    if(num==site.length&&num!=0){
         site[0].default=true
     }
     localStorage.setItem('address',JSON.stringify(site))
 }
-const change = (item, index) => {
+const change = (item, index) => {//默认地址
     site.forEach((items) => {
         items.default = false
     })
@@ -259,8 +256,14 @@ const save = () => {
     } else {
         if(!swit.switch){
         site.push(addredd)
+        if(site.length==1){
+            site[0].default=true
+        }
+        console.log(11);
     }else{
+        console.log(22);
         swit.switch=false
+        
         site[swit.editIndex]=addredd
     }
         localStorage.setItem('address', JSON.stringify(site))

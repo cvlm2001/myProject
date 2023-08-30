@@ -1,11 +1,18 @@
 <script setup>
-import { ref, reactive, watch,onBeforeUpdate } from "vue";
+import { ref, reactive, watch, onBeforeUpdate, getCurrentInstance } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import Cookies from 'js-cookie'
 // import commod from './views/commodity.vue'
 import cartImage from '@/assets/icon-cart.png'
 let intValue = ref('')
 const router = useRouter()
 const route = useRoute()
+
+const instan = getCurrentInstance()
+const intDate = instan.appContext.config.globalProperties
+let cook = reactive({ user: intDate.$cookies.get("token") })
+
+
 let title = [{
     name: "FUN肆爱 甜出圈"
 }, {
@@ -28,8 +35,19 @@ let backGround = [{
 }]
 let user = reactive(JSON.parse(localStorage.getItem('login')))
 
-onBeforeUpdate(()=>{
-    console.log(111);
+watch(route, () => {
+    if (intDate.$cookies.get("token") != null) {
+        cook.user = intDate.$cookies.get("token")
+        // console.log(cook.user);
+    }
+    num=0
+    if (localStorage.getItem('cart') == null) {
+        num = 0
+    } else {
+        JSON.parse(localStorage.getItem('cart')).forEach(() => {
+            num++
+        })
+    }
 })
 const login = () => {
     router.push({ name: 'login' })
@@ -63,22 +81,16 @@ let gotoShop = (index) => {
     if (index == 1) {
         router.push({ name: 'shopCart' })
 
-    }else if(index==0){
-    router.push({path:'/order/'})
-        
+    } else if (index == 0) {
+        router.push({ path: '/order/' })
+
 
     }
 }
-let num=reactive(0)
-if(localStorage.getItem('cart')==null){
-    num=reactive(0)
-}else{
-    JSON.parse(localStorage.getItem('cart')).forEach(()=>{
-        num++
-    })
-}
-let gotoCom=()=>{
-    router.push({name:'commodity'})
+let num = reactive(0)
+
+let gotoCom = () => {
+    router.push({ name: 'commodity' })
 }
 </script>
 
@@ -95,7 +107,7 @@ let gotoCom=()=>{
             </div>
             <div class="head_right">
                 <ul class="right">
-                    <li v-if="user == null">
+                    <li v-if="cook.user == null">
                         <span style="cursor: pointer;">注册</span>
                         <span>|</span>
                         <span style="cursor: pointer;" @click="login()">登录</span>

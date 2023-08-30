@@ -10,7 +10,7 @@
                 <span>账户密码</span>
                 <input v-model="account.password" @blur="cPass()" type="text" placeholder="输入密码">
             </div>
-            <p :class="{redText:isPass}">请输入正确的手机号</p>
+            <p :class="{ redText: isPass }">请输入正确的手机号</p>
 
             <div>
                 <span>验证码</span>
@@ -37,7 +37,8 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router';
-const router=useRouter()
+import Cookies from 'vue-cookies'
+const router = useRouter()
 
 let random = ref(Math.floor(Math.random() * 9000) + 1000)
 let change = () => {
@@ -57,12 +58,12 @@ let cPhone = () => {
         isActive.value = true
     }
 }
-let isPass=ref(false)
-let cPass=()=>{
-    if(account.password==undefined){
-        isPass.value=true
-    }else{
-        isPass.value=false
+let isPass = ref(false)
+let cPass = () => {
+    if (account.password == undefined) {
+        isPass.value = true
+    } else {
+        isPass.value = false
     }
 }
 let isTest = ref(false)
@@ -78,11 +79,11 @@ let checBox = () => {
     checkbox = !checkbox
 }
 let login = () => {
-    if (isActive.value == false&&account.password!=''&&isTest.value==false&&checkbox==true) {
-        localStorage.setItem('login',JSON.stringify(account))
-        
-        router.push({path:"/",query:{t:Date.now()}})
-        
+    if (isActive.value == false && account.password != '' && isTest.value == false && checkbox == true) {
+        localStorage.setItem('login', JSON.stringify(account))
+        $cookies.set('token', account)
+        router.push({ path: "/", query: { t: Date.now() } })
+
     }
 }
 </script>
